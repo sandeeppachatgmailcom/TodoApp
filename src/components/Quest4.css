@@ -1,0 +1,10 @@
+.strikethrough {
+    text-decoration: line-through;
+  }
+  .toDoApp{
+    background-color: rgba(75, 67, 67, 0.338);
+    padding: 10px;
+    color: whitesmoke;
+    text-align: left;
+    
+  }

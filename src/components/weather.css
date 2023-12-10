@@ -1,0 +1,8 @@
+.maincontainer{
+    font-family: poppins;
+    height:150px;
+    background-color: rgba(75, 67, 67, 0.338);
+    align-items :center;  
+    text-align: left;
+    padding: 10px;
+}

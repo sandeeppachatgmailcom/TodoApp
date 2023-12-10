@@ -1,5 +1,9 @@
 .App {
   text-align: center;
+  background-image: url('../public/neom-XDtzu1D2P8c-unsplash.jpg');
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
 }
 
 .App-logo {
