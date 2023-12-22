@@ -1,16 +1,13 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState,} from "react";
 import Weather from "./weatherApp";
 
-export const UserContext = createContext();
+export const userContext = createContext();
 
 function Context() {
   const [temperature, setTemperature] = useState(0);
 
   return (
     <div>
-      <UserContext.Provider value={  {temperature, setTemperature}  }>
-        <Weather />
-      </UserContext.Provider>
     </div>
   );
 }
