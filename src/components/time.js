@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useContext } from 'react'
 import './time.css'
+import { userContext } from './context'
 
 function TimeBoard (){
+    // const  {temperature,setTemperature}  = useContext()
     const [time,setTime]  = useState('')
     const [date,setDate] = useState('')
     useEffect(()=>{
