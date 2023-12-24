@@ -11,10 +11,9 @@ import Comp from '../components/classComponent'
 import { useState } from 'react';
 import FunComp from '../components/Func';
 import Second from '../components/2ndClassComponent';
-import { useHistory } from 'react-router-dom';
 
 
-function Home(){
+function Contact(){
     const [temperature, setTemperature] = useState(0);
     return (
       <div className="App container-fluid d-flex  ">
@@ -59,4 +58,4 @@ function Home(){
     );
 }
 
-export default Home
+export default Contact

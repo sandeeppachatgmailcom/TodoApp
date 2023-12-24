@@ -1,26 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
-import Name from './components/div'
-import Weather from './components/weatherApp';
-import TimeBoard from './components/time';
-import ToDoApp from './components/Quest4';
-import TryUseEffect from './components/UseEffect';
-import Comp from './components/classComponent'
-// import Context, { userContext } from './components/context';
-import { useState } from 'react';
-import FunComp from './components/Func';
-import Second from './components/2ndClassComponent';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
 import Home from './pages/home';
-import { AuthContext, AuthProvider } from './authentication/authentication';
- 
+import About from './pages/about';
+import Contact from './pages/contact';
+import { AuthProvider } from './authentication/authentication';
+
 function App() {
-  return(
+  return (
     <div>
       <AuthProvider>
-        <Home/>
+        <Router>
+          <Routes>
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </Router>
       </AuthProvider>
     </div>
-    )
+  );
 }
 
 export default App;
