@@ -33,7 +33,10 @@ function Home(){
              </div>
   
         </div>
-         <div className='col-4 '>
+        <div className='col-2 '>
+         </div>
+         <div className='col-2 '>
+         
          <div className = 'container-flex  col-12'>
              <ToDoApp />
              </div>

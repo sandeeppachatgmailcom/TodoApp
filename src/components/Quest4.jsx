@@ -2,7 +2,7 @@ import React,{useContext, useEffect, useState} from 'react';
 import './Quest4.css';
 import  { auth } from '../Firebase/auth';
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc,getDocs, deleteDoc, doc   } from "firebase/firestore";
+import { getFirestore, collection, addDoc,getDocs, deleteDoc, doc, setDoc   } from "firebase/firestore";
 const firebaseConfig = {
     apiKey: "AIzaSyBi5ybnqmE3NKKq8f9hywnFp7ixFdHsJ2w",
     authDomain: "meta-gear-397809.firebaseapp.com",
@@ -23,18 +23,23 @@ function ToDoApp(){
     let initialTasks = [];
     const [tasks, setTasks] = useState(initialTasks);
 
-
-    //let initialTasks = [{Task:'Reading Notebook',Strike:1,index:1},{Task:'Playing Cricket',Strike:0,index:2},{Task:'riding Horse',Strike:1,index:3},{Task:'Going School',Strike:0,index:4}, {Task:'Selling Goods',Strike:0,index:5}];
-    
     useEffect(() => {
         async function getData() {
           try {
             const querySnapshot = await getDocs(collection(db, 'task'));
             const result = querySnapshot.docs.map((doc) => {
-                let temp = doc.data().newTask
-                temp.id = doc.id;
-                return temp
+                const tempData = doc.data();
+                if (tempData && tempData.newTask) {
+                    const temp = tempData.newTask;
+                    temp.id = doc.id;
+                    console.log(temp, 'temp');
+                    return temp;
+                } else {
+                    // Handle the case where newTask is undefined or null
+                    return null; // or handle it in a way that makes sense for your use case
+                }
             });
+            console.log(result,'data loaded')
             setTasks(result);
           } catch (error) {
             console.error('Error getting documents: ', error);
@@ -42,21 +47,11 @@ function ToDoApp(){
         }
     
         getData();
+        console.log(tasks,'taskstaskstaskstaskstasks')
       }, [db]);
 
+       
       
-      getData();
-      async function getData() {
-          const querySnapshot = await getDocs(collection(db, 'task'));
-          querySnapshot.forEach((doc) => {
-               
-              let temp = doc.data().newTask
-              temp.id = doc.id;
-              initialTasks.push(temp)
-
-          });
-      }
-    
        
     let [value,setValue]= useState('')
     let saveIndex =0;
@@ -67,14 +62,25 @@ function ToDoApp(){
         if (task.trim() !== '') {
             const newTask =  {task:task,strike:0,index:nextIndex(),delete:false}
             console.log(newTask,db);
+            const res= tasks.filter((item)=>{
+                return item.task==task
+            })
+            console.log(res,'ssdsdsdsdsd')
+            if (!res.length){
+
             try {
                 const docRef = await addDoc(collection(db, "task"),{newTask});
-                console.log("Document written with ID: ", docRef.id);
+                console.log("Document written with ID: ", docRef);
               } catch (e) {
                 console.error("Error adding document: ", e);
               }
-             setTasks([...tasks,newTask]);
+              setTasks([...tasks,newTask]);
              setValue('');
+            }
+            else{
+                alert('already exist')
+            }
+             
 
         }
     }
@@ -90,36 +96,65 @@ function ToDoApp(){
         return parseInt(max.index)+1;
     }
     
-    const editTask = (taskId)=>{
+    const editTask =async  (taskId)=>{
+         
         if(document.getElementById('idNewText').value) {
              (document.getElementById('addNewbutton').click()); 
         }
         saveIndex = taskId;
         const tasklist = [...tasks]
         const tast = tasklist.splice(taskId,1);
-        setValue(tast[0][0])
+        setValue(tast[0].task)
+        console.log(tast[0],'dsasasasasassasasasa' );
+        await deleteDoc(doc(db,'task',tast[0].id))
         setTasks(tasklist);
+        
+
     }
 
 
     const deleteTask =async (position)=>{
         
         console.log(position,'position')
-
-             await deleteDoc(doc(db,"task",position.id))
+        await deleteDoc(doc(db,"task",position.id))
           
-       
-        
+        async function getData() {
+            try {
+              const querySnapshot = await getDocs(collection(db, 'task'));
+              const result = querySnapshot.docs.map((doc) => {
+                  const tempData = doc.data();
+                  if (tempData && tempData.newTask) {
+                      const temp = tempData.newTask;
+                      temp.id = doc.id;
+                      console.log(temp, 'temp');
+                      return temp;
+                  } else {
+                      // Handle the case where newTask is undefined or null
+                      return null; // or handle it in a way that makes sense for your use case
+                  }
+              });
+              console.log(result,'data loaded')
+              setTasks(result);
+            } catch (error) {
+              console.error('Error getting documents: ', error);
+            }
+          }
+      
+          getData(); 
     }
 
-    const makeitStrike=(index,key)=>{
+    const makeitStrike=async (index,key)=>{
         const tempTasks = [...tasks];
         console.log(tempTasks,'tempTasks')
         const temptask = tempTasks.filter((current)=> ( current.index ==key ) ) 
         console.log(tempTasks,'tempTasks');
-        temptask[0].Strike?temptask[0].Strike=0:temptask[0].Strike=1;
+        temptask[0].strike?temptask[0].strike=0:temptask[0].strike=1;
+        console.log(temptask[0],'temxxxxxxxxxxxxxxxxxxxxxp')
         tempTasks.splice(index,1,temptask[0])
+        await setDoc(doc(db,'task',temptask[0].id),{newTask:temptask[0]})
         setTasks(tempTasks); 
+        
+        
         
     }
 
@@ -130,9 +165,8 @@ function ToDoApp(){
     
     const reloadList = () => {
         return tasks.map((item, index) => (
-             
-            <div className='container-flex rounded text-light text-left' key={'li' + index}>
-                <label  onClick={()=>{makeitStrike(index,item.index);}} id={'lbl'+index} style={{textDecoration: item.Strike ? 'line-through' : 'none' }}  className='text col-8 ' htmlFor={index}>  {item.task } </label>
+            <div className='container-flex rounded text-light text-left' key={item.id}>
+                <label  onClick={()=>{makeitStrike(index,item.index);}} id={'lbl'+index} style={{textDecoration: item.strike ? 'line-through' : 'none' }}  className='text col-8 ' htmlFor={index}>  {item.task } </label>
                 <button key={index} onClick={()=>{deleteTask(item)}}  value={index} className='col-1 btn text-warning bi bi-trash'>   </button>
                 <button key={index} onClick={()=>{editTask(index)}}  value={index} className='col-1 btn text-warning bi bi-pencil-fill'>   </button>
             </div>
@@ -151,7 +185,7 @@ function ToDoApp(){
             </div>
             <div className='container-fluid col-12 d-flex   '>
                 <input onChange={(e)=>{setValue(e.target.value);
-                console.log(value)}}  className='text rounded border  w-100' type="text" name="" id="idNewText" />
+                console.log(value)}} value={value} className='text rounded border  w-100' type="text" name="" id="idNewText" />
                 <button onClick={()=>{
                     addTask(document.getElementById('idNewText').value)
                 }} className='btn border bi bi-file-earmark-plus-fill text-warning' id='addNewbutton' type="button"> </button>
