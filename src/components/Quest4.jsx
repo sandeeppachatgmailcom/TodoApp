@@ -1,20 +1,9 @@
 import React,{useContext, useEffect, useState} from 'react';
 import './Quest4.css';
-import  { auth } from '../Firebase/auth';
+import  db  from '../Firebase/auth';
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc,getDocs, deleteDoc, doc, setDoc   } from "firebase/firestore";
-const firebaseConfig = {
-    apiKey: "AIzaSyBi5ybnqmE3NKKq8f9hywnFp7ixFdHsJ2w",
-    authDomain: "meta-gear-397809.firebaseapp.com",
-    projectId: "meta-gear-397809",
-    storageBucket: "meta-gear-397809.appspot.com",
-    messagingSenderId: "75139760459",
-    appId: "1:75139760459:web:3f1913102df5167d82a8ce",
-    measurementId: "G-FYDTEETQPP"
-  };
-   // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+
 
 
 
@@ -153,9 +142,6 @@ function ToDoApp(){
         tempTasks.splice(index,1,temptask[0])
         await setDoc(doc(db,'task',temptask[0].id),{newTask:temptask[0]})
         setTasks(tempTasks); 
-        
-        
-        
     }
 
     const takeInput = (event)=>{

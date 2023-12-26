@@ -20,7 +20,7 @@ class Second extends React.Component{
             count:this.state.count+1})
          
     }
-
+     
      
     render(){
         console.log('render')
@@ -28,6 +28,7 @@ class Second extends React.Component{
             <div>
                  <h6>My 2nd class {this.props.name} {this.props.love} </h6>
                    <button onClick={this.increment} >hello {this.state.count} </button>
+                   
                    <h3>{this.state.count} </h3>
         </div>
         )
