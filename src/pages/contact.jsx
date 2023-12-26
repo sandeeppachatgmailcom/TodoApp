@@ -11,49 +11,14 @@ import Comp from '../components/classComponent'
 import { useState } from 'react';
 import FunComp from '../components/Func';
 import Second from '../components/2ndClassComponent';
+import Parent from "../components/page2Parent";
 
 
 function Contact(){
     const [temperature, setTemperature] = useState(0);
     return (
       <div className="App container-fluid d-flex  ">
-         {/* <userContext.Provider value={ {temperature,setTemperature}  }> */}
-  
-         <div className='col-2 '>
-            <Comp />
-            <Second name='sanoop' love='false' />
-         </div>
-         <div className='col-2 '>
-            <FunComp />
-         </div>
-         <div className='col-2 '>
-         <div className = 'container-flex  col-12'>
-             
-              
-             </div>
-  
-        </div>
-        <div className='col-2 '>
-         </div>
-         <div className='col-2 '>
-         
-         <div className = 'container-flex  col-12'>
-             <ToDoApp />
-             </div>
-         </div>
-         <div className='col-2 container-flex'>
-            <div className='container-flex col-12'>
-                <Name name={'Sandeep Pachat'} address={'Thekum kai meethal'}/>  
-            </div>
-            <div className='container-flex  col-12 '>
-              <Weather />
-             </div>
-             <div className='container-flex  col-12'>
-              <TimeBoard/>
-             </div>
-            
-         </div>
-         {/* </userContext.Provider> */}
+         <Parent/>
       </div>
     );
 }
